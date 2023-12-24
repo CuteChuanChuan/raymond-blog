@@ -6,7 +6,22 @@
     <description>Recent content on Raymond Hung&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
+    <lastBuildDate>Sat, 23 Dec 2023 12:47:44 +0800</lastBuildDate>
     <atom:link href="https://cutechuanchuan.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Helloworld</title>
+      <link>https://cutechuanchuan.github.io/posts/hello/</link>
+      <pubDate>Sat, 23 Dec 2023 12:47:44 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/posts/hello/</guid>
+      <description>Hello World </description>
+    </item>
+    <item>
+      <title>以終為始－AppWorks School Batch #21 Data Engineer Class</title>
+      <link>https://cutechuanchuan.github.io/posts/appworksschool/</link>
+      <pubDate>Sat, 23 Dec 2023 12:47:44 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/posts/appworksschool/</guid>
+      <description></description>
+    </item>
     <item>
       <title>About</title>
       <link>https://cutechuanchuan.github.io/about/</link>
