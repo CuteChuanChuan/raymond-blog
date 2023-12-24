@@ -1,4 +1,68 @@
-theme = "ananke"
 baseURL = 'https://cutechuanchuan.github.io/'
-languageCode = 'en-us'
-title = 'Raymond Blog'
+title = "Raymond Hung's Blog"
+theme = "hugo-coder"
+languagecode = "en"
+defaultcontentlanguage = "en"
+
+paginate = 10
+
+disqusShortname = "Raymond"
+
+[markup.highlight]
+style = "github-dark"
+
+[params]
+  author = "Raymond Hung"
+  info = "Data Engineer, Pythonist, and Lifetime Learner"
+  description = "Raymond Hung's personal website"
+  keywords = "data engineer, blog, developer, personal, "
+  avatarurl = "images/avatar.jpg"
+#  gravatar = "kirk336neo@gmail.com"
+
+  faviconSVG = "/img/favicon.svg"
+  favicon_32 = "/img/favicon-32x32.png"
+  favicon_16 = "/img/favicon-16x16.png"
+
+  since = 2023
+  dateFormat = "January 2, 2006"
+
+  enableTwemoji = true
+
+  colorScheme = "auto"
+  hidecolorschemetoggle = false
+
+  # customCSS = ["css/custom.css"]
+  # customSCSS = ["scss/custom.scss"]
+  # customJS = ["js/custom.js"]
+
+[taxonomies]
+  category = "categories"
+  series = "series"
+  tag = "tags"
+  author = "authors"
+
+# Social links
+[[params.social]]
+  name = "Github"
+  icon = "fa fa-github fa-2x"
+  weight = 1
+  url = "https://github.com/CuteChuanChuan"
+
+# Menu links
+[languages.en]
+languageName = ":uk:"
+
+[[languages.en.menu.main]]
+name = "About"
+weight = 1
+url = "about/"
+
+[[languages.en.menu.main]]
+name = "Blog"
+weight = 2
+url = "posts/"
+
+[[languages.en.menu.main]]
+name = "Projects"
+weight = 3
+url = "projects/"
