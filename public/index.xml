@@ -6,20 +6,20 @@
     <description>Recent content on Raymond Hung&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 25 Dec 2023 15:53:29 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 25 Dec 2023 15:53:46 +0800</lastBuildDate>
     <atom:link href="https://cutechuanchuan.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>AppWorks School (系列 2 之 3) - Batch #21 Data Engineer Class</title>
-      <link>https://cutechuanchuan.github.io/posts/appworksschool_2_codingcamp/</link>
-      <pubDate>Mon, 25 Dec 2023 15:53:29 +0800</pubDate>
-      <guid>https://cutechuanchuan.github.io/posts/appworksschool_2_codingcamp/</guid>
-      <description></description>
-    </item>
     <item>
       <title>AppWorks School (系列 3 之 3) - 找工作！ Go!</title>
       <link>https://cutechuanchuan.github.io/posts/appworksschool_3_jobsearching/</link>
-      <pubDate>Sun, 24 Dec 2023 15:53:46 +0800</pubDate>
+      <pubDate>Mon, 25 Dec 2023 15:53:46 +0800</pubDate>
       <guid>https://cutechuanchuan.github.io/posts/appworksschool_3_jobsearching/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AppWorks School (系列 2 之 3) - Batch #21 Data Engineer Class</title>
+      <link>https://cutechuanchuan.github.io/posts/appworksschool_2_codingcamp/</link>
+      <pubDate>Sun, 24 Dec 2023 15:53:29 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/posts/appworksschool_2_codingcamp/</guid>
       <description></description>
     </item>
     <item>
