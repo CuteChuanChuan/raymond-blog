@@ -1,7 +1,7 @@
 +++ 
 draft = false
 date = 2023-12-23T12:47:44+08:00
-title = "AppWorks School (系列 1 之 3) - 申請 AppWorks School"
+title = "AppWorks School (系列 1 之 2) - 申請 AppWorks School"
 description = ""
 slug = ""
 authors = []

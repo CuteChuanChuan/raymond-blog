@@ -1,5 +1,5 @@
 +++
-title = 'AppWorks School (系列 2 之 3) - Batch #21 Data Engineer Class'
+title = 'AppWorks School (系列 2 之 2) - Batch #21 Data Engineer Class'
 date = 2023-12-24T15:53:29+08:00
 draft = false
 tags = ['AppWorks School', '轉職']
