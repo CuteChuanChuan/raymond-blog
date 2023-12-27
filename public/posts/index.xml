@@ -6,21 +6,35 @@
     <description>Recent content in Posts on Raymond Hung&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 23 Dec 2023 12:47:44 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 25 Dec 2023 15:53:29 +0800</lastBuildDate>
     <atom:link href="https://cutechuanchuan.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Helloworld</title>
-      <link>https://cutechuanchuan.github.io/posts/hello/</link>
-      <pubDate>Sat, 23 Dec 2023 12:47:44 +0800</pubDate>
-      <guid>https://cutechuanchuan.github.io/posts/hello/</guid>
-      <description>Hello World </description>
+      <title>AppWorks School (系列 2 之 3) - Batch #21 Data Engineer Class</title>
+      <link>https://cutechuanchuan.github.io/posts/appworksschool_2_codingcamp/</link>
+      <pubDate>Mon, 25 Dec 2023 15:53:29 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/posts/appworksschool_2_codingcamp/</guid>
+      <description></description>
     </item>
     <item>
-      <title>以終為始－AppWorks School Batch #21 Data Engineer Class</title>
-      <link>https://cutechuanchuan.github.io/posts/appworksschool/</link>
-      <pubDate>Sat, 23 Dec 2023 12:47:44 +0800</pubDate>
-      <guid>https://cutechuanchuan.github.io/posts/appworksschool/</guid>
+      <title>AppWorks School (系列 3 之 3) - 找工作！ Go!</title>
+      <link>https://cutechuanchuan.github.io/posts/appworksschool_3_jobsearching/</link>
+      <pubDate>Sun, 24 Dec 2023 15:53:46 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/posts/appworksschool_3_jobsearching/</guid>
       <description></description>
+    </item>
+    <item>
+      <title>AppWorks School (系列 1 之 3) - 申請 AppWorks School</title>
+      <link>https://cutechuanchuan.github.io/posts/appworksschool_1_preparation/</link>
+      <pubDate>Sat, 23 Dec 2023 12:47:44 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/posts/appworksschool_1_preparation/</guid>
+      <description>申請 AppWorks School 的過程會有兩關。第一關會是需要申請者填寫一份問卷，其中的每一道問題都在邀請申請人不停地詢問自己：我為何想要轉職？ 我為了轉職做了哪些努力？因此雖然問卷的題目不算太多，但是回答這份問卷的過程，會是一趟蠻辛苦的歷程，因為會需要不停確認自己的內心， 也會需要不停檢視自己過去為了轉職做了哪些事。盡可能地呈現自己的 (1) 轉職動機、(2) 轉職決心、(3) 為了轉職做了哪些努力。&#xA;在等待下一階段的通知之前，就繼續保持自己過去的步伐吧，持續學習！&#xA;接著進入到面談階段，會是由 School 的夥伴和申請人相互了解，在這個階段，夥伴會透過更多的提問來讓他們評估申請人想要走向轉職這條艱辛的路的決心。 在這次的面談中，就將自己對於轉職的那股渴望展現出來，更別忘記提到你過去做了哪些努力，這樣才會讓別人知道：你是真的有訂定好目標，且不停的走在這條路上。&#xA;最後，因為「僧多粥少」，如果你最終錄取了，那非常恭喜你通過第一關了！但是千萬別鬆懈，School 的訓練是很嚴格扎實的，稍有鬆懈就會很危險， 所以把握機會努力加強自己的實力吧！但如果你最終被拒絕了，那也別氣餒，持續累積自己。同學中也有幾位是經過多次申請之後才進入到 School 中的。&#xA;祝大家申請順利。</description>
+    </item>
+    <item>
+      <title>AppWorks School (系列 0 之 3) - 啟動、衝刺、堅持</title>
+      <link>https://cutechuanchuan.github.io/posts/appworksschool_0_series/</link>
+      <pubDate>Fri, 22 Dec 2023 12:47:44 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/posts/appworksschool_0_series/</guid>
+      <description>從有轉職的念頭開始，我就不停查詢相關的資訊，也找到許多 AppWorks School 畢業的校友分享的資訊。 作為 AppWorks School Batch #21 Data Engineering Class 的畢業學員，想要將這一路上的心得與感受分享給想要轉職的人， 希望我的文章提供足夠的資訊給你/妳，如果有任何問題都歡迎跟我聯繫喔。&#xA;AppWorks School 系列會有三篇文章， 第一篇會是描述我當初申請 AppWorks School 的歷程， 第二篇則是會對 AppWorks School 的 Coding Bootcamp 內容加以介紹， 第三篇將重點放在應徵工作的部分。</description>
     </item>
   </channel>
 </rss>
