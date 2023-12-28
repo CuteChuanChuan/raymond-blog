@@ -6,8 +6,29 @@
     <description>Recent content in Tags on Raymond Hung&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 24 Dec 2023 15:53:29 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 28 Dec 2023 14:10:41 +0800</lastBuildDate>
     <atom:link href="https://cutechuanchuan.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cloud Run</title>
+      <link>https://cutechuanchuan.github.io/tags/cloud-run/</link>
+      <pubDate>Thu, 28 Dec 2023 14:10:41 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/tags/cloud-run/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>GCP</title>
+      <link>https://cutechuanchuan.github.io/tags/gcp/</link>
+      <pubDate>Thu, 28 Dec 2023 14:10:41 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/tags/gcp/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Serverless</title>
+      <link>https://cutechuanchuan.github.io/tags/serverless/</link>
+      <pubDate>Thu, 28 Dec 2023 14:10:41 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/tags/serverless/</guid>
+      <description></description>
+    </item>
     <item>
       <title>AppWorks School</title>
       <link>https://cutechuanchuan.github.io/tags/appworks-school/</link>

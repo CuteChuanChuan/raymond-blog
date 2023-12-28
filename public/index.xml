@@ -6,8 +6,15 @@
     <description>Recent content on Raymond Hung&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 24 Dec 2023 15:53:29 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 28 Dec 2023 14:10:41 +0800</lastBuildDate>
     <atom:link href="https://cutechuanchuan.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cloud Run 學習記錄</title>
+      <link>https://cutechuanchuan.github.io/posts/cloudrun/</link>
+      <pubDate>Thu, 28 Dec 2023 14:10:41 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/posts/cloudrun/</guid>
+      <description></description>
+    </item>
     <item>
       <title>AppWorks School (系列 2 之 2) - Batch #21 Data Engineer Class</title>
       <link>https://cutechuanchuan.github.io/posts/appworksschool_2_codingcamp/</link>
@@ -41,7 +48,7 @@
       <link>https://cutechuanchuan.github.io/projects/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://cutechuanchuan.github.io/projects/</guid>
-      <description> Comment Detector Link to heading </description>
+      <description>Comment Detector Link to heading A platform offering users comprehensive &amp;amp; insightful data about PTT (Taiwan&amp;rsquo;s largest forum). Users can form their own judgment about cyber warriors (網軍) and people manipulating public opinions (帶風向) with data provided by this platform.</description>
     </item>
   </channel>
 </rss>
