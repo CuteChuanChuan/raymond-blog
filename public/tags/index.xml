@@ -6,26 +6,47 @@
     <description>Recent content in Tags on Raymond Hung&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 28 Dec 2023 14:10:41 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 07 Jan 2024 14:10:41 +0800</lastBuildDate>
     <atom:link href="https://cutechuanchuan.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Cloud Run</title>
       <link>https://cutechuanchuan.github.io/tags/cloud-run/</link>
-      <pubDate>Thu, 28 Dec 2023 14:10:41 +0800</pubDate>
+      <pubDate>Sun, 07 Jan 2024 14:10:41 +0800</pubDate>
       <guid>https://cutechuanchuan.github.io/tags/cloud-run/</guid>
       <description></description>
     </item>
     <item>
-      <title>GCP</title>
-      <link>https://cutechuanchuan.github.io/tags/gcp/</link>
-      <pubDate>Thu, 28 Dec 2023 14:10:41 +0800</pubDate>
-      <guid>https://cutechuanchuan.github.io/tags/gcp/</guid>
+      <title>Docker</title>
+      <link>https://cutechuanchuan.github.io/tags/docker/</link>
+      <pubDate>Sun, 07 Jan 2024 14:10:41 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/tags/docker/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>GitHub Actions</title>
+      <link>https://cutechuanchuan.github.io/tags/github-actions/</link>
+      <pubDate>Sun, 07 Jan 2024 14:10:41 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/tags/github-actions/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Google Cloud (GC)</title>
+      <link>https://cutechuanchuan.github.io/tags/google-cloud-gc/</link>
+      <pubDate>Sun, 07 Jan 2024 14:10:41 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/tags/google-cloud-gc/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Python</title>
+      <link>https://cutechuanchuan.github.io/tags/python/</link>
+      <pubDate>Sun, 07 Jan 2024 14:10:41 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/tags/python/</guid>
       <description></description>
     </item>
     <item>
       <title>Serverless</title>
       <link>https://cutechuanchuan.github.io/tags/serverless/</link>
-      <pubDate>Thu, 28 Dec 2023 14:10:41 +0800</pubDate>
+      <pubDate>Sun, 07 Jan 2024 14:10:41 +0800</pubDate>
       <guid>https://cutechuanchuan.github.io/tags/serverless/</guid>
       <description></description>
     </item>
@@ -41,6 +62,13 @@
       <link>https://cutechuanchuan.github.io/tags/%E8%BD%89%E8%81%B7/</link>
       <pubDate>Sun, 24 Dec 2023 15:53:29 +0800</pubDate>
       <guid>https://cutechuanchuan.github.io/tags/%E8%BD%89%E8%81%B7/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>CI/CD</title>
+      <link>https://cutechuanchuan.github.io/tags/ci/cd/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://cutechuanchuan.github.io/tags/ci/cd/</guid>
       <description></description>
     </item>
   </channel>

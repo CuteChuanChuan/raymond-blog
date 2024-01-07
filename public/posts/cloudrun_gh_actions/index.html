@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>
+  結合 Cloud Run 和 GitHub Actions，自動部署 FastAPI server 到 Cloud Run 上 · Raymond Hung&#39;s Blog
+</title>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+
+
+
+
+<meta name="author" content="Raymond Hung">
+<meta name="description" content="前言 Link to heading 設想一個情況：你製作了一個網站，今天你開發了一個很酷的新功能，想要趕快將程式碼更新到 server 上，讓使用者可以趕快享受這個新功能。
+但是當你連線到 server 時，卻發現 server 不知道發生什麼問題，導致你需要先花費大量的時間來處理 server 的問題，唯有解決 server 的問題才能更新程式碼。 這樣的狀況是自己維運 server 會遇到的問題，如果你想要讓自己專注在開發上，不想要再將時間花在 server 的維運上，那麼你可以考慮使用 Cloud Run，一個由 Google Cloud 的全代管 Serverless 服務。
+何謂 Serverless 服務 Link to heading 由雲端服務的供應商 (e.g., AWS &amp; GC) 處理與維運基礎架構，進而讓開發人員可以專注在開發系統核心功能上，不在需要花時間處理任何基礎設施。 一言以蔽之，Serverless 服務的目標就是讓開發人員專注在應用，而非架構。
+Cloud Run 介紹 Link to heading Cloud Run 是 Google Cloud 的全代管 Serverless 服務，它可以幫助開發人員在開發新的功能後快速部署。 它結合 Serverless 的特色與容器化的特色：(1) 根據需求自動擴展、(2) 用多少付多少。 另外，它具有額外的特色：(1) 可以和其他 GC 服務搭配，像是 Cloud Build &amp; Artifact Registry、(2) 內建的 load balancer，可以自動導流流量、(3) 有提供 HTTPS 端點供使用者立即可以使用。">
+<meta name="keywords" content="data engineer, blog, developer, personal, ">
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="結合 Cloud Run 和 GitHub Actions，自動部署 FastAPI server 到 Cloud Run 上"/>
+<meta name="twitter:description" content="前言 Link to heading 設想一個情況：你製作了一個網站，今天你開發了一個很酷的新功能，想要趕快將程式碼更新到 server 上，讓使用者可以趕快享受這個新功能。
+但是當你連線到 server 時，卻發現 server 不知道發生什麼問題，導致你需要先花費大量的時間來處理 server 的問題，唯有解決 server 的問題才能更新程式碼。 這樣的狀況是自己維運 server 會遇到的問題，如果你想要讓自己專注在開發上，不想要再將時間花在 server 的維運上，那麼你可以考慮使用 Cloud Run，一個由 Google Cloud 的全代管 Serverless 服務。
+何謂 Serverless 服務 Link to heading 由雲端服務的供應商 (e.g., AWS &amp; GC) 處理與維運基礎架構，進而讓開發人員可以專注在開發系統核心功能上，不在需要花時間處理任何基礎設施。 一言以蔽之，Serverless 服務的目標就是讓開發人員專注在應用，而非架構。
+Cloud Run 介紹 Link to heading Cloud Run 是 Google Cloud 的全代管 Serverless 服務，它可以幫助開發人員在開發新的功能後快速部署。 它結合 Serverless 的特色與容器化的特色：(1) 根據需求自動擴展、(2) 用多少付多少。 另外，它具有額外的特色：(1) 可以和其他 GC 服務搭配，像是 Cloud Build &amp; Artifact Registry、(2) 內建的 load balancer，可以自動導流流量、(3) 有提供 HTTPS 端點供使用者立即可以使用。"/>
+
+<meta property="og:title" content="結合 Cloud Run 和 GitHub Actions，自動部署 FastAPI server 到 Cloud Run 上" />
+<meta property="og:description" content="前言 Link to heading 設想一個情況：你製作了一個網站，今天你開發了一個很酷的新功能，想要趕快將程式碼更新到 server 上，讓使用者可以趕快享受這個新功能。
+但是當你連線到 server 時，卻發現 server 不知道發生什麼問題，導致你需要先花費大量的時間來處理 server 的問題，唯有解決 server 的問題才能更新程式碼。 這樣的狀況是自己維運 server 會遇到的問題，如果你想要讓自己專注在開發上，不想要再將時間花在 server 的維運上，那麼你可以考慮使用 Cloud Run，一個由 Google Cloud 的全代管 Serverless 服務。
+何謂 Serverless 服務 Link to heading 由雲端服務的供應商 (e.g., AWS &amp; GC) 處理與維運基礎架構，進而讓開發人員可以專注在開發系統核心功能上，不在需要花時間處理任何基礎設施。 一言以蔽之，Serverless 服務的目標就是讓開發人員專注在應用，而非架構。
+Cloud Run 介紹 Link to heading Cloud Run 是 Google Cloud 的全代管 Serverless 服務，它可以幫助開發人員在開發新的功能後快速部署。 它結合 Serverless 的特色與容器化的特色：(1) 根據需求自動擴展、(2) 用多少付多少。 另外，它具有額外的特色：(1) 可以和其他 GC 服務搭配，像是 Cloud Build &amp; Artifact Registry、(2) 內建的 load balancer，可以自動導流流量、(3) 有提供 HTTPS 端點供使用者立即可以使用。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://cutechuanchuan.github.io/posts/cloudrun_gh_actions/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-01-07T14:10:41+08:00" />
+<meta property="article:modified_time" content="2024-01-07T14:10:41+08:00" />
+
+
+
+
+
+<link rel="canonical" href="https://cutechuanchuan.github.io/posts/cloudrun_gh_actions/">
+
+
+<link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+
+
+  
+  
+  <link rel="stylesheet" href="/css/coder.min.e1bdf152d93b060b06ba5d496486ed9c201a8b95d335e035beb5faebe3b61cad.css" integrity="sha256-4b3xUtk7BgsGul1JZIbtnCAai5XTNeA1vrX66&#43;O2HK0=" crossorigin="anonymous" media="screen" />
+
+
+
+
+
+
+  
+    
+    
+    <link rel="stylesheet" href="/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css" integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin="anonymous" media="screen" />
+  
+
+
+
+ 
+
+
+
+
+<link rel="icon" type="image/svg+xml" href="/img/favicon.svg" sizes="any">
+<link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/img/favicon-16x16.png" sizes="16x16">
+
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+
+
+</head>
+
+
+
+
+
+
+<body class="preload-transitions colorscheme-auto">
+  
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+  <main class="wrapper">
+    <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Raymond Hung&#39;s Blog
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/projects/">Projects</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+    <div class="content">
+      
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://cutechuanchuan.github.io/posts/cloudrun_gh_actions/">
+              結合 Cloud Run 和 GitHub Actions，自動部署 FastAPI server 到 Cloud Run 上
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime="2024-01-07T14:10:41&#43;08:00">
+                January 7, 2024
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              4-minute read
+            </span>
+          </div>
+          
+          
+          <div class="tags">
+  <i class="fa fa-tag" aria-hidden="true"></i>
+    <span class="tag">
+      <a href="/tags/google-cloud-gc/">Google Cloud (GC)</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="/tags/cloud-run/">Cloud Run</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="/tags/serverless/">Serverless</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="/tags/github-actions/">GitHub Actions</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="/tags/ci/cd/">CI/CD</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="/tags/docker/">Docker</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="/tags/python/">Python</a>
+    </span></div>
+
+        </div>
+      </header>
+
+      <div class="post-content">
+        
+        <div class="table-of-contents">
+          <h2>目錄</h2>
+          <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#何謂-serverless-服務">何謂 Serverless 服務</a></li>
+    <li><a href="#cloud-run-介紹httpscloudgooglecomrunhlen"><a href="https://cloud.google.com/run?hl=en">Cloud Run 介紹</a></a></li>
+    <li><a href="#cloud-run-部署方式">Cloud Run 部署方式</a></li>
+    <li><a href="#結合-github-actions--cloud-run">結合 GitHub Actions &amp; Cloud Run</a>
+      <ol>
+        <li><a href="#前置準備">前置準備</a></li>
+        <li><a href="#步驟">步驟</a></li>
+      </ol>
+    </li>
+    <li><a href="#參考文章">參考文章</a></li>
+  </ol>
+</nav>
+          ---------------------------------------------------------------------------------------
+        </div>
+        <h1 id="前言">
+  前言
+  <a class="heading-link" href="#%e5%89%8d%e8%a8%80">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<p>設想一個情況：你製作了一個網站，今天你開發了一個很酷的新功能，想要趕快將程式碼更新到 server 上，讓使用者可以趕快享受這個新功能。<br>
+但是當你連線到 server 時，卻發現 server 不知道發生什麼問題，導致你需要先花費大量的時間來處理 server 的問題，唯有解決 server 的問題才能更新程式碼。
+這樣的狀況是自己維運 server 會遇到的問題，如果你想要讓自己專注在開發上，不想要再將時間花在 server 的維運上，那麼你可以考慮使用 Cloud Run，一個由 Google Cloud 的全代管 Serverless 服務。</p>
+<h1 id="何謂-serverless-服務">
+  何謂 Serverless 服務
+  <a class="heading-link" href="#%e4%bd%95%e8%ac%82-serverless-%e6%9c%8d%e5%8b%99">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<p>由雲端服務的供應商 (e.g., AWS &amp; GC) 處理與維運基礎架構，進而讓開發人員可以專注在開發系統核心功能上，不在需要花時間處理任何基礎設施。
+一言以蔽之，Serverless 服務的目標就是讓開發人員專注在應用，而非架構。</p>
+<h1 id="cloud-run-介紹httpscloudgooglecomrunhlen">
+  <a href="https://cloud.google.com/run?hl=en"  class="external-link" target="_blank" rel="noopener">Cloud Run 介紹</a>
+  <a class="heading-link" href="#cloud-run-%e4%bb%8b%e7%b4%b9httpscloudgooglecomrunhlen">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<p>Cloud Run 是 Google Cloud 的全代管 Serverless 服務，它可以幫助開發人員在開發新的功能後快速部署。
+它結合 Serverless 的特色與容器化的特色：(1) 根據需求自動擴展、(2) 用多少付多少。
+另外，它具有額外的特色：(1) 可以和其他 GC 服務搭配，像是 Cloud Build &amp; Artifact Registry、(2) 內建的 load balancer，可以自動導流流量、(3) 有提供 HTTPS 端點供使用者立即可以使用。</p>
+<h1 id="cloud-run-部署方式">
+  Cloud Run 部署方式
+  <a class="heading-link" href="#cloud-run-%e9%83%a8%e7%bd%b2%e6%96%b9%e5%bc%8f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<p>Cloud Run 有兩種部署方式。第一種是手動，由開發人員自己建 image → 上傳 Artifact Registry → 在 Cloud Run 手動選擇 image 來部署。
+第二種是自動，開發人員可以使用 GitHub Actions 來達到 CI/CD，而這也是這篇文章想要分享的部署方式。</p>
+<h1 id="結合-github-actions--cloud-run">
+  結合 GitHub Actions &amp; Cloud Run
+  <a class="heading-link" href="#%e7%b5%90%e5%90%88-github-actions--cloud-run">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<h2 id="前置準備">
+  前置準備
+  <a class="heading-link" href="#%e5%89%8d%e7%bd%ae%e6%ba%96%e5%82%99">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<ol>
+<li>首先要先在 GitHub 上面新增一個 Repo。</li>
+<li>電腦安裝 gcloud 並登入 Google Cloud 帳號，即可用command line 操控 Google Cloud (參考<a href="https://pythonviz.com/google-cloud/macos-install-google-cloud-sdk/"  class="external-link" target="_blank" rel="noopener">此文</a>)。</li>
+</ol>
+<h2 id="步驟">
+  步驟
+  <a class="heading-link" href="#%e6%ad%a5%e9%a9%9f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<ol>
+<li>[Google Cloud] 新增一個專案</li>
+<li>[Google Cloud] 處理 Auth Step 1：新增服務帳號、使用專案的 Workload Identity Federation 來進行 GitHub Actions 驗證。(讀者可以參考<a href="https://jcshawn.com/cloud-run-with-github-action/"  class="external-link" target="_blank" rel="noopener">這篇文章的步驟一</a>，有更詳細的指令說明)</li>
+<li>[Google Cloud] 處理 Auth Step 2：針對剛剛建立的服務帳號授予所需權限，讓這個服務帳號可以上傳 docker image 到 Artifact Registry，並且可以從 Artifact Registry 讀取 image，並且部署到 Cloud Run
+<ul>
+<li>至 <a href="https://console.cloud.google.com/iam-admin/iam?authuser=0&amp;hl=zh-TW&amp;project=cloudrun-ghactions"  class="external-link" target="_blank" rel="noopener">Google Cloud IAM 與管理頁面</a>，記得要確認是否是剛剛新建的那個專案</li>
+<li>身分與存取權管理 -&gt; &ldquo;授予存取權&rdquo; -&gt; 新增主體的部分填入剛剛新建立的服務帳號 -&gt; 指派角色 (新增：服務帳戶使用者、Artifact Registry 寫入者、Artifact Registry 讀取者、Cloud Run 管理員)</li>
+</ul>
+</li>
+<li>[Local] 準備程式碼與 Dockerfile (requirements.txt 可見<a href="https://github.com/CuteChuanChuan/__blog__CloudRun.GHActions/blob/main/requirements.txt"  class="external-link" target="_blank" rel="noopener">此檔案</a>，FastAPI server 架構可見下方示意)
+(我有建立一個 <a href="https://github.com/CuteChuanChuan/__blog__CloudRun.GHActions"  class="external-link" target="_blank" rel="noopener">demo repo</a>，讀者也可以直接 clone repo)</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>├── app
+</span></span><span style="display:flex;"><span>│   ├── __init__.py
+</span></span><span style="display:flex;"><span>│   └── main.py
+</span></span><span style="display:flex;"><span>├── Dockerfile
+</span></span><span style="display:flex;"><span>└── requirements.txt
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># main.py</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">from</span> <span style="color:#ff7b72">fastapi</span> <span style="color:#ff7b72">import</span> FastAPI
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">from</span> <span style="color:#ff7b72">typing</span> <span style="color:#ff7b72">import</span> Union
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>app <span style="color:#ff7b72;font-weight:bold">=</span> FastAPI()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#d2a8ff;font-weight:bold">@app.get</span>(<span style="color:#a5d6ff">&#34;/&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">def</span> <span style="color:#d2a8ff;font-weight:bold">read_root</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#ff7b72">return</span> {<span style="color:#a5d6ff">&#34;Hello&#34;</span>: <span style="color:#a5d6ff">&#34;World&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#d2a8ff;font-weight:bold">@app.get</span>(<span style="color:#a5d6ff">&#34;/items/</span><span style="color:#a5d6ff">{item_id}</span><span style="color:#a5d6ff">&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff7b72">def</span> <span style="color:#d2a8ff;font-weight:bold">read_item</span>(item_id: int, q: Union[str, <span style="color:#79c0ff">None</span>] <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#79c0ff">None</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff7b72">return</span> {<span style="color:#a5d6ff">&#34;item_id&#34;</span>: item_id, <span style="color:#a5d6ff">&#34;q&#34;</span>: q}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Dockerfile</span><span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">FROM</span><span style="color:#a5d6ff"> python:3.12-slim</span><span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">WORKDIR</span><span style="color:#a5d6ff"> /code</span><span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">COPY</span> ./requirements.txt /code/requirements.txt<span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">RUN</span> pip install --no-cache-dir --upgrade -r /code/requirements.txt<span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">COPY</span> ./app /code/app<span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#8b949e;font-style:italic"># 常見的形式是：CMD [&#34;uvicorn&#34;, &#34;app.main:app&#34;, &#34;--host&#34;, &#34;0.0.0.0&#34;, &#34;--port&#34;, &#34;80&#34;]</span><span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#8b949e;font-style:italic"># 但因 Cloud Run 預設的 Port 是 8080，且會當作環境變數傳入到 build image 的過程中</span><span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#8b949e;font-style:italic"># 若採用上方寫法會產生問題，所以需寫成下方的形式，$PORT 會去吃在 build image 時的環境變數 Port </span><span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">CMD</span> uvicorn app.main:app --host 0.0.0.0 --port <span style="color:#79c0ff">$PORT</span><span style="color:#f85149">
+</span></span></span></code></pre></div><ol start="5">
+<li>[Google Cloud] 至 Artifact Registry 新增一個 repo 來放 image (後面的 yaml 檔會用到 repo 名稱)</li>
+<li>[GitHub] 將機密資訊設定成 GitHub repo 的 secret，讓 GitHub Actions 可以使用這些機密資訊，同時避免直接寫在 yaml 上，造成資安問題<br>
+至前置準備 step 1 創立的 repo -&gt; (上方 tab) Setting -&gt; (左側 menu) Secrets and variables → Actions
+點擊 New repository secret 來新增兩個 secret：<br>
+(a) WIF_PROVIDER：步驟 2 最後得到的 Provider 資源名稱<br>
+(類似 projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider)<br>
+(b) WIF_SERVICE_ACCOUNT：步驟 2 最後得到的 Provider 資源名稱<br>
+(類似 github-service-account@你的專案名稱.iam.gserviceaccount.com)<br>
+(與此設定有關：<code>gcloud iam service-accounts create &quot;github-service-account&quot; --project &quot;${PROJECT_ID}&quot;</code>)</li>
+<li>[Local] 準備 GitHub Actions 需要的 yaml 檔 (可參考<a href="https://github.com/google-github-actions/example-workflows/blob/main/workflows/deploy-cloudrun/cloudrun-docker.yml"  class="external-link" target="_blank" rel="noopener">官方提供的 yaml 檔</a>，但其中有些地方需更新)<br>
+(可直接在 GitHub 上面設定，也可在 local 寫好之後 push 到 main branch，亦或是 pull request 到 main)</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Build and Deploy to Cloud Run</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681"></span><span style="color:#7ee787">on</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">push</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">branches</span>:<span style="color:#6e7681"> </span>[<span style="color:#6e7681"> </span><span style="color:#a5d6ff">main ]</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">pull_request</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">branches</span>:<span style="color:#6e7681"> </span>[<span style="color:#6e7681"> </span><span style="color:#a5d6ff">main ]</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681"></span><span style="color:#7ee787">env</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">PROJECT_ID</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">請放入你的 Google Cloud 專案 ID</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">GAR_LOCATION</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">asia-east1 (依讀者需求調整 Artifact Registry 的存放位置，台灣是 asia-east1)</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">SERVICE</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">請放入你在步驟 5 建立的 repo 名稱</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">REGION</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">asia-east1 (依讀者需求調整 Cloud Run 的位置，台灣是 asia-east1)</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681"></span><span style="color:#7ee787">jobs</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">build-and-deploy</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">permissions</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">contents</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;read&#39;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">id-token</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;write&#39;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">runs-on</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ubuntu-latest</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">steps</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Checkout</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">uses</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">actions/checkout@v2</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#8b949e;font-style:italic"># 官方提供的版本較舊：&#39;google-github-actions/auth@v0&#39;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Google Auth</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">id</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">auth</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">uses</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;google-github-actions/auth@v2&#39;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">with</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">token_format</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;access_token&#39;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">workload_identity_provider</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;${{ secrets.WIF_PROVIDER }}&#39;</span><span style="color:#6e7681"> </span><span style="color:#8b949e;font-style:italic"># e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">service_account</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;${{ secrets.WIF_SERVICE_ACCOUNT }}&#39;</span><span style="color:#6e7681"> </span><span style="color:#8b949e;font-style:italic"># e.g. - my-service-account@my-project.iam.gserviceaccount.com</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#8b949e;font-style:italic"># 官方提供的版本較舊：&#39;docker/login-action@v1&#39;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Docker Auth</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">id</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">docker-auth</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">uses</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;docker/login-action@v3&#39;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">with</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">username</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;oauth2accesstoken&#39;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">password</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;${{ steps.auth.outputs.access_token }}&#39;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">registry</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;${{ env.GAR_LOCATION }}-docker.pkg.dev&#39;</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#8b949e;font-style:italic"># 官方提供的路徑有錯，原為 /${{ env.SERVICE }}:${{ github.sha }}，應為 /${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Build and Push Container</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">run</span>:<span style="color:#6e7681"> </span>|-<span style="color:#a5d6ff">
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">          docker build -t &#34;${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}&#34; ./
+</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">          docker push &#34;${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}&#34;</span><span style="color:#6e7681">          
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#8b949e;font-style:italic"># 官方提供的路徑有錯，原為 /${{ env.SERVICE }}:${{ github.sha }}，應為 /${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#8b949e;font-style:italic"># 官方提供的版本較舊：uses: google-github-actions/deploy-cloudrun@v0</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Deploy to Cloud Run</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">id</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">deploy</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">uses</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">google-github-actions/deploy-cloudrun@v2</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">with</span>:<span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">service</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">${{ env.SERVICE }}</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">region</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">${{ env.REGION }}</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">image</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Show Output</span><span style="color:#6e7681">
+</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">run</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">echo ${{ steps.deploy.outputs.url }}</span><span style="color:#6e7681">
+</span></span></span></code></pre></div><ol start="8">
+<li>確認 GitHub Actions 運行的狀況 <img src="https://imgur.com/KRPkVn0.png" alt="Imgur"></li>
+<li>[Google Cloud] 至 Cloud Run 點擊部署成功的服務 -&gt; (上方 tab) 安全性 -&gt; 驗證 -&gt; 允許在未經驗證的情況下叫用 (開放給其他人可以直接連線)</li>
+<li>大功告成！可以點擊 Cloud RUn 上面的網址來確認！<img src="https://imgur.com/jfgWABf.png" alt="Imgur"></li>
+</ol>
+<h1 id="參考文章">
+  參考文章
+  <a class="heading-link" href="#%e5%8f%83%e8%80%83%e6%96%87%e7%ab%a0">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<ol>
+<li><a href="https://www.ecloudture.com/the-difference-between-traditional-server-and-serverless/"  class="external-link" target="_blank" rel="noopener">傳統伺服器 V.S. 無伺服器！如何找出適合自己的架構？</a></li>
+<li><a href="https://datadrivenai.wordpress.com/2019/10/08/%E4%BB%80%E9%BA%BC%E6%98%AF-serverless-%E6%9E%B6%E6%A7%8B%EF%BC%9F%E5%84%AA%E5%8B%A2%E5%8A%A3%E5%8B%A2%E7%82%BA%E4%BD%95%EF%BC%9F/"  class="external-link" target="_blank" rel="noopener">什麼是 Serverless 架構？優勢劣勢為何？</a></li>
+<li><a href="https://jcshawn.com/cloud-run-with-github-action/"  class="external-link" target="_blank" rel="noopener">提高開發效率！用 GitHub Action 自動部署 Docker 容器到 Cloud Run 教學</a></li>
+<li><a href="https://blog.cloud-ace.tw/application-modernization/serverless/cloud-run-overview-and-tutorial/"  class="external-link" target="_blank" rel="noopener">Cloud Run 是什麼？6大特色介紹與實作教學</a></li>
+<li><a href="https://joehuang-pop.github.io/2020/05/01/GCP-Cloud-Run-%E5%85%AD%E5%80%8B%E5%AF%A6%E4%BD%9C-%E8%A7%A3%E6%9E%90%E9%BA%BB%E9%9B%80%E9%9B%96%E5%B0%8F%E4%BA%94%E8%87%9F%E4%BF%B1%E5%85%A8-Cloud-Run-is-Small-but-Complete/"  class="external-link" target="_blank" rel="noopener">[GCP] Cloud Run 六個實作: 解析麻雀雖小五臟俱全 | Cloud Run is Small but Complete</a></li>
+</ol>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script>
+  window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "Raymond" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    
+    document.addEventListener('themeChanged', function (e) { 
+        if (document.readyState == 'complete') {
+          DISQUS.reset({ reload: true, config: disqus_config });
+        }
+    });
+</script>
+        
+        
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+    </div>
+
+    <footer class="footer">
+  <section class="container">
+    ©
+    
+      2023 -
+    
+    2024
+     Raymond Hung 
+    ·
+    
+    Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/" target="_blank" rel="noopener">Coder</a>.
+    
+  </section>
+</footer>
+
+  </main>
+
+  
+
+  
+  
+  <script src="/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js" integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script>
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+
+</html>

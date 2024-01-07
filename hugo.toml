@@ -7,9 +7,19 @@ defaultcontentlanguage = "en"
 paginate = 10
 
 disqusShortname = "Raymond"
+tableOfContents = true
 
 [markup.highlight]
 style = "github-dark"
+
+
+[markup.goldmark]
+  [markup.goldmark.renderer]
+    unsafe = true  # 允許自定義 HTML
+[markup.tableOfContents]
+  startLevel = 1  # 從二級標題開始生成 TOC
+  endLevel = 3    # 到三級標題結束
+  ordered = true # 是否使用有序列表
 
 [params]
   author = "Raymond Hung"

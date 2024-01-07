@@ -6,14 +6,14 @@
     <description>Recent content in Cloud Run on Raymond Hung&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 28 Dec 2023 14:10:41 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 07 Jan 2024 14:10:41 +0800</lastBuildDate>
     <atom:link href="https://cutechuanchuan.github.io/tags/cloud-run/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Cloud Run 學習記錄</title>
-      <link>https://cutechuanchuan.github.io/posts/cloudrun/</link>
-      <pubDate>Thu, 28 Dec 2023 14:10:41 +0800</pubDate>
-      <guid>https://cutechuanchuan.github.io/posts/cloudrun/</guid>
-      <description>Cloud Run</description>
+      <title>結合 Cloud Run 和 GitHub Actions，自動部署 FastAPI server 到 Cloud Run 上</title>
+      <link>https://cutechuanchuan.github.io/posts/cloudrun_gh_actions/</link>
+      <pubDate>Sun, 07 Jan 2024 14:10:41 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/posts/cloudrun_gh_actions/</guid>
+      <description>前言 Link to heading 設想一個情況：你製作了一個網站，今天你開發了一個很酷的新功能，想要趕快將程式碼更新到 server 上，讓使用者可以趕快享受這個新功能。&#xA;但是當你連線到 server 時，卻發現 server 不知道發生什麼問題，導致你需要先花費大量的時間來處理 server 的問題，唯有解決 server 的問題才能更新程式碼。 這樣的狀況是自己維運 server 會遇到的問題，如果你想要讓自己專注在開發上，不想要再將時間花在 server 的維運上，那麼你可以考慮使用 Cloud Run，一個由 Google Cloud 的全代管 Serverless 服務。&#xA;何謂 Serverless 服務 Link to heading 由雲端服務的供應商 (e.g., AWS &amp;amp; GC) 處理與維運基礎架構，進而讓開發人員可以專注在開發系統核心功能上，不在需要花時間處理任何基礎設施。 一言以蔽之，Serverless 服務的目標就是讓開發人員專注在應用，而非架構。&#xA;Cloud Run 介紹 Link to heading Cloud Run 是 Google Cloud 的全代管 Serverless 服務，它可以幫助開發人員在開發新的功能後快速部署。 它結合 Serverless 的特色與容器化的特色：(1) 根據需求自動擴展、(2) 用多少付多少。 另外，它具有額外的特色：(1) 可以和其他 GC 服務搭配，像是 Cloud Build &amp;amp; Artifact Registry、(2) 內建的 load balancer，可以自動導流流量、(3) 有提供 HTTPS 端點供使用者立即可以使用。</description>
     </item>
   </channel>
 </rss>
