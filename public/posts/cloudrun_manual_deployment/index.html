@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>
+  手動部署到 Cloud Run 上 · Raymond Hung&#39;s Blog
+</title>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+
+
+
+
+<meta name="author" content="Raymond Hung">
+<meta name="description" content="前言 Link to heading 在先前的文章中，分享了如何使用 GitHub Actions 進行 CI/CD，來自動化整個部署流程。 除了自動之外，手動部署也是另外一種體驗。這篇文章想和大家分享手動建立 Docker Image 後部署到 Cloud Run 的流程。 （更多關於 Cloud Run 的介紹可以參考先前的文章）
+手動部署到 Cloud Run Link to heading 步驟 Link to heading [Local] 準備程式碼與 Dockerfile，並打包成 Docker Image 打包時要注意作業系統，Cloud Run 要求：linux/amd64 reference 1: official document reference 2: stack overflow # Dockerfile FROM python:3.11 RUN apt-get update &amp;&amp; apt-get install -y \ gcc \ libc-dev \ libffi-dev \ &amp;&amp; rm -rf /var/lib/apt/lists/* WORKDIR /server COPY .">
+<meta name="keywords" content="data engineer, blog, developer, personal, ">
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="手動部署到 Cloud Run 上"/>
+<meta name="twitter:description" content="前言 Link to heading 在先前的文章中，分享了如何使用 GitHub Actions 進行 CI/CD，來自動化整個部署流程。 除了自動之外，手動部署也是另外一種體驗。這篇文章想和大家分享手動建立 Docker Image 後部署到 Cloud Run 的流程。 （更多關於 Cloud Run 的介紹可以參考先前的文章）
+手動部署到 Cloud Run Link to heading 步驟 Link to heading [Local] 準備程式碼與 Dockerfile，並打包成 Docker Image 打包時要注意作業系統，Cloud Run 要求：linux/amd64 reference 1: official document reference 2: stack overflow # Dockerfile FROM python:3.11 RUN apt-get update &amp;&amp; apt-get install -y \ gcc \ libc-dev \ libffi-dev \ &amp;&amp; rm -rf /var/lib/apt/lists/* WORKDIR /server COPY ."/>
+
+<meta property="og:title" content="手動部署到 Cloud Run 上" />
+<meta property="og:description" content="前言 Link to heading 在先前的文章中，分享了如何使用 GitHub Actions 進行 CI/CD，來自動化整個部署流程。 除了自動之外，手動部署也是另外一種體驗。這篇文章想和大家分享手動建立 Docker Image 後部署到 Cloud Run 的流程。 （更多關於 Cloud Run 的介紹可以參考先前的文章）
+手動部署到 Cloud Run Link to heading 步驟 Link to heading [Local] 準備程式碼與 Dockerfile，並打包成 Docker Image 打包時要注意作業系統，Cloud Run 要求：linux/amd64 reference 1: official document reference 2: stack overflow # Dockerfile FROM python:3.11 RUN apt-get update &amp;&amp; apt-get install -y \ gcc \ libc-dev \ libffi-dev \ &amp;&amp; rm -rf /var/lib/apt/lists/* WORKDIR /server COPY ." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://cutechuanchuan.github.io/posts/cloudrun_manual_deployment/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-02-21T21:10:41+08:00" />
+<meta property="article:modified_time" content="2024-02-21T21:10:41+08:00" />
+
+
+
+
+
+<link rel="canonical" href="https://cutechuanchuan.github.io/posts/cloudrun_manual_deployment/">
+
+
+<link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+
+
+  
+  
+  <link rel="stylesheet" href="/css/coder.min.e1bdf152d93b060b06ba5d496486ed9c201a8b95d335e035beb5faebe3b61cad.css" integrity="sha256-4b3xUtk7BgsGul1JZIbtnCAai5XTNeA1vrX66&#43;O2HK0=" crossorigin="anonymous" media="screen" />
+
+
+
+
+
+
+  
+    
+    
+    <link rel="stylesheet" href="/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css" integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin="anonymous" media="screen" />
+  
+
+
+
+ 
+
+
+
+
+<link rel="icon" type="image/svg+xml" href="/img/favicon.svg" sizes="any">
+<link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/img/favicon-16x16.png" sizes="16x16">
+
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+
+
+</head>
+
+
+
+
+
+
+<body class="preload-transitions colorscheme-auto">
+  
+<div class="float-container">
+    <a id="dark-mode-toggle" class="colorscheme-toggle">
+        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
+    </a>
+</div>
+
+
+  <main class="wrapper">
+    <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Raymond Hung&#39;s Blog
+    </a>
+    
+      <input type="checkbox" id="menu-toggle" />
+      <label class="menu-button float-right" for="menu-toggle">
+        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+      </label>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/about/">About</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/posts/">Blog</a>
+            </li>
+          
+            <li class="navigation-item">
+              <a class="navigation-link" href="/projects/">Projects</a>
+            </li>
+          
+        
+        
+      </ul>
+    
+  </section>
+</nav>
+
+
+    <div class="content">
+      
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">
+            <a class="title-link" href="https://cutechuanchuan.github.io/posts/cloudrun_manual_deployment/">
+              手動部署到 Cloud Run 上
+            </a>
+          </h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <time datetime="2024-02-21T21:10:41&#43;08:00">
+                February 21, 2024
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fa fa-clock-o" aria-hidden="true"></i>
+              One-minute read
+            </span>
+          </div>
+          
+          
+          <div class="tags">
+  <i class="fa fa-tag" aria-hidden="true"></i>
+    <span class="tag">
+      <a href="/tags/google-cloud-gc/">Google Cloud (GC)</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="/tags/cloud-run/">Cloud Run</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="/tags/serverless/">Serverless</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="/tags/docker/">Docker</a>
+    </span>
+      <span class="separator">•</span>
+    <span class="tag">
+      <a href="/tags/python/">Python</a>
+    </span></div>
+
+        </div>
+      </header>
+
+      <div class="post-content">
+        
+        <h2>目錄</h2>
+        <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#手動部署到-cloud-run">手動部署到 Cloud Run</a>
+      <ol>
+        <li><a href="#步驟">步驟</a></li>
+      </ol>
+    </li>
+    <li><a href="#後續可能遇到的問題-會再另外寫文章與大家分享">後續可能遇到的問題 (會再另外寫文章與大家分享~)</a></li>
+  </ol>
+</nav>
+        ----------------------------------------
+        <h1 id="前言">
+  前言
+  <a class="heading-link" href="#%e5%89%8d%e8%a8%80">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<p>在<a href="https://cutechuanchuan.github.io/posts/cloudrun_gh_actions/" >先前的文章</a>中，分享了如何使用 GitHub Actions 進行 CI/CD，來自動化整個部署流程。
+除了自動之外，手動部署也是另外一種體驗。這篇文章想和大家分享手動建立 Docker Image 後部署到 Cloud Run 的流程。
+（更多關於 Cloud Run 的介紹可以參考<a href="https://cutechuanchuan.github.io/posts/cloudrun_gh_actions/" >先前的文章</a>）</p>
+<h1 id="手動部署到-cloud-run">
+  手動部署到 Cloud Run
+  <a class="heading-link" href="#%e6%89%8b%e5%8b%95%e9%83%a8%e7%bd%b2%e5%88%b0-cloud-run">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<h2 id="步驟">
+  步驟
+  <a class="heading-link" href="#%e6%ad%a5%e9%a9%9f">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h2>
+<ol>
+<li>[Local] 準備程式碼與 Dockerfile，並打包成 Docker Image
+<ul>
+<li>打包時要注意作業系統，Cloud Run 要求：linux/amd64</li>
+<li>reference 1: <a href="https://cloud.google.com/run/docs/container-contract#languages"  class="external-link" target="_blank" rel="noopener">official document</a></li>
+<li>reference 2: <a href="https://stackoverflow.com/a/68766137/21803201"  class="external-link" target="_blank" rel="noopener">stack overflow</a></li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Dockerfile</span><span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">FROM</span><span style="color:#a5d6ff"> python:3.11</span><span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">RUN</span> apt-get update <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> apt-get install -y <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#79c0ff"></span>    gcc <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#79c0ff"></span>    libc-dev <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#79c0ff"></span>    libffi-dev <span style="color:#79c0ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#79c0ff"></span>    <span style="color:#ff7b72;font-weight:bold">&amp;&amp;</span> rm -rf /var/lib/apt/lists/*<span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">WORKDIR</span><span style="color:#a5d6ff"> /server</span><span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">COPY</span> . .<span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">RUN</span> pip install -r requirements.txt<span style="color:#f85149">
+</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">CMD</span> [<span style="color:#a5d6ff">&#34;gunicorn&#34;</span>, <span style="color:#a5d6ff">&#34;main:app&#34;</span>, <span style="color:#a5d6ff">&#34;-k&#34;</span>, <span style="color:#a5d6ff">&#34;uvicorn.workers.UvicornWorker&#34;</span>, <span style="color:#a5d6ff">&#34;-w&#34;</span>, <span style="color:#a5d6ff">&#34;4&#34;</span>, <span style="color:#a5d6ff">&#34;--bind&#34;</span>, <span style="color:#a5d6ff">&#34;0.0.0.0:8000&#34;</span>]<span style="color:#f85149">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>docker build -t image_name --platform linux/amd64 -f Dockerfile .
+</span></span></code></pre></div><ol start="2">
+<li>給予剛剛建立的 image 一個 tag (<a href="https://cloud.google.com/artifact-registry/docs/docker/pushing-and-pulling#tag"  class="external-link" target="_blank" rel="noopener">document</a>)</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>docker tag image:v1 <span style="color:#ff7b72;font-weight:bold">[</span>your-region<span style="color:#ff7b72;font-weight:bold">]</span>-docker.pkg.dev/<span style="color:#ff7b72;font-weight:bold">[</span>your-project-id<span style="color:#ff7b72;font-weight:bold">]</span>/<span style="color:#ff7b72;font-weight:bold">[</span>repo-on-registry<span style="color:#ff7b72;font-weight:bold">]</span>/<span style="color:#ff7b72;font-weight:bold">[</span>image_name<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span></code></pre></div><ol start="3">
+<li>上傳至 artifact registry</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>docker push <span style="color:#ff7b72;font-weight:bold">[</span>your-region<span style="color:#ff7b72;font-weight:bold">]</span>-docker.pkg.dev/<span style="color:#ff7b72;font-weight:bold">[</span>your-project-id<span style="color:#ff7b72;font-weight:bold">]</span>/<span style="color:#ff7b72;font-weight:bold">[</span>repo-on-registry<span style="color:#ff7b72;font-weight:bold">]</span>/<span style="color:#ff7b72;font-weight:bold">[</span>image_name<span style="color:#ff7b72;font-weight:bold">]</span>
+</span></span></code></pre></div><ol start="4">
+<li>部署
+<ol>
+<li>至 Cloud Run 頁面，選擇「建立服務」<img src="https://imgur.com/aV7lJTz.png" alt="Imgur"></li>
+<li>如果有上傳 artifact registry 成功，就可以去拉剛剛上傳的 image <img src="https://imgur.com/cAGM6lL.png" alt="Imgur"></li>
+<li>預設會聽 PORT 8080，如果有特殊需要可以修改 <img src="https://imgur.com/BNXUyU0.png" alt="Imgur"></li>
+<li>疑難排解 - <a href="https://cloud.google.com/run/docs/troubleshooting#container-failed-to-start"  class="external-link" target="_blank" rel="noopener">Official Document</a></li>
+</ol>
+</li>
+</ol>
+<h1 id="後續可能遇到的問題-會再另外寫文章與大家分享">
+  後續可能遇到的問題 (會再另外寫文章與大家分享~)
+  <a class="heading-link" href="#%e5%be%8c%e7%ba%8c%e5%8f%af%e8%83%bd%e9%81%87%e5%88%b0%e7%9a%84%e5%95%8f%e9%a1%8c-%e6%9c%83%e5%86%8d%e5%8f%a6%e5%a4%96%e5%af%ab%e6%96%87%e7%ab%a0%e8%88%87%e5%a4%a7%e5%ae%b6%e5%88%86%e4%ba%ab">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<ol>
+<li>若有使用其他工具 (e.g., MongoDB Atlas)，可能會限制存取的 IP，那要怎麼辦？<br>
+-&gt; Serverless VPC Access + VPC + Cloud NAT</li>
+<li>若需要套上自己的網域名稱，那要怎麼辦？<br>
+-&gt; Domain Name + Load Balancer</li>
+</ol>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        <div id="disqus_thread"></div>
+<script>
+  window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "Raymond" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    
+    document.addEventListener('themeChanged', function (e) { 
+        if (document.readyState == 'complete') {
+          DISQUS.reset({ reload: true, config: disqus_config });
+        }
+    });
+</script>
+        
+        
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+    </div>
+
+    <footer class="footer">
+  <section class="container">
+    ©
+    
+      2023 -
+    
+    2024
+     Raymond Hung 
+    ·
+    
+    Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/" target="_blank" rel="noopener">Coder</a>.
+    
+  </section>
+</footer>
+
+  </main>
+
+  
+
+  
+  
+  <script src="/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js" integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script>
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+
+</html>
