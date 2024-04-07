@@ -4,6 +4,9 @@ theme = "hugo-coder"
 languagecode = "en"
 defaultcontentlanguage = "en"
 
+pygmentsUseClasses = true
+pygmentsCodeFences = true
+
 paginate = 10
 
 disqusShortname = "Raymond"
@@ -11,6 +14,14 @@ tableOfContents = true
 
 [markup.highlight]
 style = "github-dark"
+codeFences = true
+guessSyntax = true
+hl_Lines = ""
+lineNoStart = 1
+lineNos = true
+lineNumbersInTable = true
+tabWidth = 4
+noClasses = false
 
 
 [markup.goldmark]

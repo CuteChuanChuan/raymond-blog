@@ -38,7 +38,6 @@ Cloud Run 介紹 Link to heading Cloud Run 是 Google Cloud 的全代管 Serverl
 
 
 
-
 <link rel="canonical" href="https://cutechuanchuan.github.io/posts/cloudrun_gh_actions/">
 
 
@@ -289,38 +288,87 @@ Cloud Run 介紹 Link to heading Cloud Run 是 Google Cloud 的全代管 Serverl
 <li>[Local] 準備程式碼與 Dockerfile (requirements.txt 可見<a href="https://github.com/CuteChuanChuan/__blog__CloudRun.GHActions/blob/main/requirements.txt"  class="external-link" target="_blank" rel="noopener">此檔案</a>，FastAPI server 架構可見下方示意)
 (我有建立一個 <a href="https://github.com/CuteChuanChuan/__blog__CloudRun.GHActions"  class="external-link" target="_blank" rel="noopener">demo repo</a>，讀者也可以直接 clone repo)</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>.
-</span></span><span style="display:flex;"><span>├── app
-</span></span><span style="display:flex;"><span>│   ├── __init__.py
-</span></span><span style="display:flex;"><span>│   └── main.py
-</span></span><span style="display:flex;"><span>├── Dockerfile
-</span></span><span style="display:flex;"><span>└── requirements.txt
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># main.py</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff7b72">from</span> <span style="color:#ff7b72">fastapi</span> <span style="color:#ff7b72">import</span> FastAPI
-</span></span><span style="display:flex;"><span><span style="color:#ff7b72">from</span> <span style="color:#ff7b72">typing</span> <span style="color:#ff7b72">import</span> Union
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>app <span style="color:#ff7b72;font-weight:bold">=</span> FastAPI()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#d2a8ff;font-weight:bold">@app.get</span>(<span style="color:#a5d6ff">&#34;/&#34;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#ff7b72">def</span> <span style="color:#d2a8ff;font-weight:bold">read_root</span>():
-</span></span><span style="display:flex;"><span>    <span style="color:#ff7b72">return</span> {<span style="color:#a5d6ff">&#34;Hello&#34;</span>: <span style="color:#a5d6ff">&#34;World&#34;</span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#d2a8ff;font-weight:bold">@app.get</span>(<span style="color:#a5d6ff">&#34;/items/</span><span style="color:#a5d6ff">{item_id}</span><span style="color:#a5d6ff">&#34;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#ff7b72">def</span> <span style="color:#d2a8ff;font-weight:bold">read_item</span>(item_id: int, q: Union[str, <span style="color:#79c0ff">None</span>] <span style="color:#ff7b72;font-weight:bold">=</span> <span style="color:#79c0ff">None</span>):
-</span></span><span style="display:flex;"><span>    <span style="color:#ff7b72">return</span> {<span style="color:#a5d6ff">&#34;item_id&#34;</span>: item_id, <span style="color:#a5d6ff">&#34;q&#34;</span>: q}
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#8b949e;font-style:italic"># Dockerfile</span><span style="color:#f85149">
-</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">FROM</span><span style="color:#a5d6ff"> python:3.12-slim</span><span style="color:#f85149">
-</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">WORKDIR</span><span style="color:#a5d6ff"> /code</span><span style="color:#f85149">
-</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">COPY</span> ./requirements.txt /code/requirements.txt<span style="color:#f85149">
-</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">RUN</span> pip install --no-cache-dir --upgrade -r /code/requirements.txt<span style="color:#f85149">
-</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">COPY</span> ./app /code/app<span style="color:#f85149">
-</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#8b949e;font-style:italic"># 常見的形式是：CMD [&#34;uvicorn&#34;, &#34;app.main:app&#34;, &#34;--host&#34;, &#34;0.0.0.0&#34;, &#34;--port&#34;, &#34;80&#34;]</span><span style="color:#f85149">
-</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#8b949e;font-style:italic"># 但因 Cloud Run 預設的 Port 是 8080，且會當作環境變數傳入到 build image 的過程中</span><span style="color:#f85149">
-</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#8b949e;font-style:italic"># 若採用上方寫法會產生問題，所以需寫成下方的形式，$PORT 會去吃在 build image 時的環境變數 Port </span><span style="color:#f85149">
-</span></span></span><span style="display:flex;"><span><span style="color:#f85149"></span><span style="color:#ff7b72">CMD</span> uvicorn app.main:app --host 0.0.0.0 --port <span style="color:#79c0ff">$PORT</span><span style="color:#f85149">
-</span></span></span></code></pre></div><ol start="5">
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── app
+</span></span><span class="line"><span class="cl">│   ├── __init__.py
+</span></span><span class="line"><span class="cl">│   └── main.py
+</span></span><span class="line"><span class="cl">├── Dockerfile
+</span></span><span class="line"><span class="cl">└── requirements.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># main.py</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@app.get</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">read_root</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">{</span><span class="s2">&#34;Hello&#34;</span><span class="p">:</span> <span class="s2">&#34;World&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@app.get</span><span class="p">(</span><span class="s2">&#34;/items/</span><span class="si">{item_id}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">read_item</span><span class="p">(</span><span class="n">item_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">{</span><span class="s2">&#34;item_id&#34;</span><span class="p">:</span> <span class="n">item_id</span><span class="p">,</span> <span class="s2">&#34;q&#34;</span><span class="p">:</span> <span class="n">q</span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="line"><span class="cl"><span class="c"># Dockerfile</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">FROM</span><span class="s"> python:3.12-slim</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">WORKDIR</span><span class="s"> /code</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">COPY</span> ./requirements.txt /code/requirements.txt<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">RUN</span> pip install --no-cache-dir --upgrade -r /code/requirements.txt<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">COPY</span> ./app /code/app<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 常見的形式是：CMD [&#34;uvicorn&#34;, &#34;app.main:app&#34;, &#34;--host&#34;, &#34;0.0.0.0&#34;, &#34;--port&#34;, &#34;80&#34;]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 但因 Cloud Run 預設的 Port 是 8080，且會當作環境變數傳入到 build image 的過程中</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c"># 若採用上方寫法會產生問題，所以需寫成下方的形式，$PORT 會去吃在 build image 時的環境變數 Port </span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">CMD</span> uvicorn app.main:app --host 0.0.0.0 --port <span class="nv">$PORT</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
 <li>[Google Cloud] 至 Artifact Registry 新增一個 repo 來放 image (後面的 yaml 檔會用到 repo 名稱)</li>
 <li>[GitHub] 將機密資訊設定成 GitHub repo 的 secret，讓 GitHub Actions 可以使用這些機密資訊，同時避免直接寫在 yaml 上，造成資安問題<br>
 至前置準備 step 1 創立的 repo -&gt; (上方 tab) Setting -&gt; (左側 menu) Secrets and variables → Actions
@@ -333,69 +381,137 @@ Cloud Run 介紹 Link to heading Cloud Run 是 Google Cloud 的全代管 Serverl
 <li>[Local] 準備 GitHub Actions 需要的 yaml 檔 (可參考<a href="https://github.com/google-github-actions/example-workflows/blob/main/workflows/deploy-cloudrun/cloudrun-docker.yml"  class="external-link" target="_blank" rel="noopener">官方提供的 yaml 檔</a>，但其中有些地方需更新)<br>
 (可直接在 GitHub 上面設定，也可在 local 寫好之後 push 到 main branch，亦或是 pull request 到 main)</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#e6edf3;background-color:#0d1117;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Build and Deploy to Cloud Run</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681"></span><span style="color:#7ee787">on</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">push</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">branches</span>:<span style="color:#6e7681"> </span>[<span style="color:#6e7681"> </span><span style="color:#a5d6ff">main ]</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">pull_request</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">branches</span>:<span style="color:#6e7681"> </span>[<span style="color:#6e7681"> </span><span style="color:#a5d6ff">main ]</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681"></span><span style="color:#7ee787">env</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">PROJECT_ID</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">請放入你的 Google Cloud 專案 ID</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">GAR_LOCATION</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">asia-east1 (依讀者需求調整 Artifact Registry 的存放位置，台灣是 asia-east1)</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">SERVICE</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">請放入你在步驟 5 建立的 repo 名稱</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">REGION</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">asia-east1 (依讀者需求調整 Cloud Run 的位置，台灣是 asia-east1)</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681"></span><span style="color:#7ee787">jobs</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">  </span><span style="color:#7ee787">build-and-deploy</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">permissions</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">contents</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;read&#39;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#7ee787">id-token</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;write&#39;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">runs-on</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">ubuntu-latest</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">    </span><span style="color:#7ee787">steps</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Checkout</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">uses</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">actions/checkout@v2</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#8b949e;font-style:italic"># 官方提供的版本較舊：&#39;google-github-actions/auth@v0&#39;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Google Auth</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">id</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">auth</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">uses</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;google-github-actions/auth@v2&#39;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">with</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">token_format</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;access_token&#39;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">workload_identity_provider</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;${{ secrets.WIF_PROVIDER }}&#39;</span><span style="color:#6e7681"> </span><span style="color:#8b949e;font-style:italic"># e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">service_account</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;${{ secrets.WIF_SERVICE_ACCOUNT }}&#39;</span><span style="color:#6e7681"> </span><span style="color:#8b949e;font-style:italic"># e.g. - my-service-account@my-project.iam.gserviceaccount.com</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#8b949e;font-style:italic"># 官方提供的版本較舊：&#39;docker/login-action@v1&#39;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Docker Auth</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">id</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">docker-auth</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">uses</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;docker/login-action@v3&#39;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">with</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">username</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;oauth2accesstoken&#39;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">password</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;${{ steps.auth.outputs.access_token }}&#39;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">registry</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">&#39;${{ env.GAR_LOCATION }}-docker.pkg.dev&#39;</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#8b949e;font-style:italic"># 官方提供的路徑有錯，原為 /${{ env.SERVICE }}:${{ github.sha }}，應為 /${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Build and Push Container</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">run</span>:<span style="color:#6e7681"> </span>|-<span style="color:#a5d6ff">
-</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">          docker build -t &#34;${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}&#34; ./
-</span></span></span><span style="display:flex;"><span><span style="color:#a5d6ff">          docker push &#34;${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}&#34;</span><span style="color:#6e7681">          
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#8b949e;font-style:italic"># 官方提供的路徑有錯，原為 /${{ env.SERVICE }}:${{ github.sha }}，應為 /${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span><span style="color:#8b949e;font-style:italic"># 官方提供的版本較舊：uses: google-github-actions/deploy-cloudrun@v0</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Deploy to Cloud Run</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">id</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">deploy</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">uses</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">google-github-actions/deploy-cloudrun@v2</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">with</span>:<span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">service</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">${{ env.SERVICE }}</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">region</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">${{ env.REGION }}</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">          </span><span style="color:#7ee787">image</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">      </span>- <span style="color:#7ee787">name</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">Show Output</span><span style="color:#6e7681">
-</span></span></span><span style="display:flex;"><span><span style="color:#6e7681">        </span><span style="color:#7ee787">run</span>:<span style="color:#6e7681"> </span><span style="color:#a5d6ff">echo ${{ steps.deploy.outputs.url }}</span><span style="color:#6e7681">
-</span></span></span></code></pre></div><ol start="8">
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Build and Deploy to Cloud Run</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">main ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="l">main ]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">env</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">PROJECT_ID</span><span class="p">:</span><span class="w"> </span><span class="l">請放入你的 Google Cloud 專案 ID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">GAR_LOCATION</span><span class="p">:</span><span class="w"> </span><span class="l">asia-east1 (依讀者需求調整 Artifact Registry 的存放位置，台灣是 asia-east1)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">SERVICE</span><span class="p">:</span><span class="w"> </span><span class="l">請放入你在步驟 5 建立的 repo 名稱</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">REGION</span><span class="p">:</span><span class="w"> </span><span class="l">asia-east1 (依讀者需求調整 Cloud Run 的位置，台灣是 asia-east1)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">build-and-deploy</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">permissions</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;read&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">id-token</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;write&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Checkout</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/checkout@v2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 官方提供的版本較舊：&#39;google-github-actions/auth@v0&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Google Auth</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">auth</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;google-github-actions/auth@v2&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">token_format</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;access_token&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">workload_identity_provider</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;${{ secrets.WIF_PROVIDER }}&#39;</span><span class="w"> </span><span class="c"># e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">service_account</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;${{ secrets.WIF_SERVICE_ACCOUNT }}&#39;</span><span class="w"> </span><span class="c"># e.g. - my-service-account@my-project.iam.gserviceaccount.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 官方提供的版本較舊：&#39;docker/login-action@v1&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Docker Auth</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">docker-auth</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;docker/login-action@v3&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;oauth2accesstoken&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;${{ steps.auth.outputs.access_token }}&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">registry</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;${{ env.GAR_LOCATION }}-docker.pkg.dev&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 官方提供的路徑有錯，原為 /${{ env.SERVICE }}:${{ github.sha }}，應為 /${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Build and Push Container</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p">|-</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">          docker build -t &#34;${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}&#34; ./
+</span></span></span><span class="line"><span class="cl"><span class="sd">          docker push &#34;${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}&#34;</span><span class="w">          
+</span></span></span><span class="line"><span class="cl"><span class="w">      
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 官方提供的路徑有錯，原為 /${{ env.SERVICE }}:${{ github.sha }}，應為 /${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 官方提供的版本較舊：uses: google-github-actions/deploy-cloudrun@v0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Deploy to Cloud Run</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">deploy</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">google-github-actions/deploy-cloudrun@v2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l">${{ env.SERVICE }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l">${{ env.REGION }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Show Output</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l">echo ${{ steps.deploy.outputs.url }}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="8">
 <li>確認 GitHub Actions 運行的狀況 <img src="https://imgur.com/KRPkVn0.png" alt="Imgur"></li>
 <li>[Google Cloud] 至 Cloud Run 點擊部署成功的服務 -&gt; (上方 tab) 安全性 -&gt; 驗證 -&gt; 允許在未經驗證的情況下叫用 (開放給其他人可以直接連線)</li>
 <li>大功告成！可以點擊 Cloud RUn 上面的網址來確認！<img src="https://imgur.com/jfgWABf.png" alt="Imgur"></li>
