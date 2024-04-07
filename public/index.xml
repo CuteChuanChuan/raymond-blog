@@ -6,31 +6,38 @@
     <description>Recent content on Raymond Hung&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 21 Feb 2024 21:10:41 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 06 Apr 2024 21:10:40 +0800</lastBuildDate>
     <atom:link href="https://cutechuanchuan.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>手動部署到 Cloud Run 上</title>
+      <title>[自學筆記] Scala Learning Note - Chapter 1 (Basic)</title>
+      <link>https://cutechuanchuan.github.io/posts/scala-learning-note-ch1-basic/</link>
+      <pubDate>Sat, 06 Apr 2024 21:10:40 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/posts/scala-learning-note-ch1-basic/</guid>
+      <description> 前言 Link to heading Scala 可以說是一個蠻神秘但是又非常有趣的語言。例如：(1) Scala 結合了 OOP (object-oriented programming) 和 FP (functional programming)；(2) Scala 可以跑在 JVM 上，但是又有 Java 沒有功能的特色；(3) 當要處理大數據時，Scala 可以帶來很大的幫助 (像是 Apache Spark 正是由 Scala 寫成的)&#xA;然而，相較於其他程式語言 (e.g., Python &amp;amp; Javascript)，網路上有關 Scala 的教學與資料數量少很多，中文的相關資料又更少。因此接下來，我會透過多篇文章來介紹 Scala 給有興趣的人。&#xA;預計會有四篇： Basic, OOP, FP, 和 Pattern Matching，而本篇即為介紹 Scala 的第一篇文章。&#xA;Basic features and concepts of Scala Link to heading 在 Scala 中，所有東西都是 expression：不論如何，程式碼一定會有一個回傳值 1 2 val exampleUnit = println(&amp;#34;Hello, World!&amp;#34;) println(exampleUnit) // 會印出 () &amp;lt;== 在 Scala 中，此稱為 Unit </description>
+    </item>
+    <item>
+      <title>[自學筆記] 手動部署到 Cloud Run 上</title>
       <link>https://cutechuanchuan.github.io/posts/cloudrun_manual_deployment/</link>
       <pubDate>Wed, 21 Feb 2024 21:10:41 +0800</pubDate>
       <guid>https://cutechuanchuan.github.io/posts/cloudrun_manual_deployment/</guid>
       <description>前言 Link to heading 在先前的文章中，分享了如何使用 GitHub Actions 進行 CI/CD，來自動化整個部署流程。 除了自動之外，手動部署也是另外一種體驗。這篇文章想和大家分享手動建立 Docker Image 後部署到 Cloud Run 的流程。 （更多關於 Cloud Run 的介紹可以參考先前的文章）&#xA;手動部署到 Cloud Run Link to heading 步驟 Link to heading [Local] 準備程式碼與 Dockerfile，並打包成 Docker Image 打包時要注意作業系統，Cloud Run 要求：linux/amd64 reference 1: official document reference 2: stack overflow 1 2 3 4 5 6 7 8 9 10 11 # Dockerfile FROM python:3.11 RUN apt-get update &amp;amp;&amp;amp; apt-get install -y \ gcc \ libc-dev \ libffi-dev \ &amp;amp;&amp;amp; rm -rf /var/lib/apt/lists/* WORKDIR /server COPY .</description>
     </item>
     <item>
-      <title>結合 Cloud Run 和 GitHub Actions，自動部署 FastAPI server 到 Cloud Run 上</title>
+      <title>[自學筆記] Cloud Run &#43; GitHub Actions，自動到 Cloud Run 上</title>
       <link>https://cutechuanchuan.github.io/posts/cloudrun_gh_actions/</link>
       <pubDate>Sun, 07 Jan 2024 14:10:41 +0800</pubDate>
       <guid>https://cutechuanchuan.github.io/posts/cloudrun_gh_actions/</guid>
       <description>前言 Link to heading 設想一個情況：你製作了一個網站，今天你開發了一個很酷的新功能，想要趕快將程式碼更新到 server 上，讓使用者可以趕快享受這個新功能。&#xA;但是當你連線到 server 時，卻發現 server 不知道發生什麼問題，導致你需要先花費大量的時間來處理 server 的問題，唯有解決 server 的問題才能更新程式碼。 這樣的狀況是自己維運 server 會遇到的問題，如果你想要讓自己專注在開發上，不想要再將時間花在 server 的維運上，那麼你可以考慮使用 Cloud Run，一個由 Google Cloud 的全代管 Serverless 服務。&#xA;何謂 Serverless 服務 Link to heading 由雲端服務的供應商 (e.g., AWS &amp;amp; GC) 處理與維運基礎架構，進而讓開發人員可以專注在開發系統核心功能上，不在需要花時間處理任何基礎設施。 一言以蔽之，Serverless 服務的目標就是讓開發人員專注在應用，而非架構。&#xA;Cloud Run 介紹 Link to heading Cloud Run 是 Google Cloud 的全代管 Serverless 服務，它可以幫助開發人員在開發新的功能後快速部署。 它結合 Serverless 的特色與容器化的特色：(1) 根據需求自動擴展、(2) 用多少付多少。 另外，它具有額外的特色：(1) 可以和其他 GC 服務搭配，像是 Cloud Build &amp;amp; Artifact Registry、(2) 內建的 load balancer，可以自動導流流量、(3) 有提供 HTTPS 端點供使用者立即可以使用。</description>
     </item>
     <item>
-      <title>AppWorks School (系列 2 之 2) - Batch #21 Data Engineer Class</title>
+      <title>[AppWorks School] (系列 2 之 2) - Batch #21 Data Engineer Class</title>
       <link>https://cutechuanchuan.github.io/posts/appworksschool_2_codingcamp/</link>
       <pubDate>Sun, 24 Dec 2023 15:53:29 +0800</pubDate>
       <guid>https://cutechuanchuan.github.io/posts/appworksschool_2_codingcamp/</guid>
       <description>AppWorks School 的課程由三大階段組成：遠距學習、實體學習、模擬面試與 hiring week。&#xA;在遠距學習階段，每一週都有排定好的課程與作業。如何安排時間是學員的自由，但是導師會嚴格檢查作業，並且有問題就會要學員修改。整個階段的學習步調很快， 所以在這一階段，找到自己的學習方式，透過大量動手實作熟悉技術是非常重要的。然後，別擔心！課程的內容絕對不夠你寫作業，所以動手查資料是必然的。 趁這個階段累積實力，能多學就多學。&#xA;進入到實體學習之後，整個步調會變得更加快速，挑戰也是一波接一波的來。此階段又可以細分成四個部分：(1) STYLiSH、(2) Topic Discussion &amp;amp; Dive into Topic、(3) Co-work &amp;amp; 企業期中考、(4) 個人專案。&#xA;STYLiSH：每天都有排定的進度。導師只說明 spec，自己想辦法完成進度，多和同學討論會有幫助的。 Topic Discussion &amp;amp; Dive into Topic：讓學員補充相關知識與累積技能與工具，個人專案可能會用到。 Co-work &amp;amp; 企業期中考：學習團隊開發。企業期中考是檢驗自己學習進度的重要機會，要好好準備！ 個人專案：求職的重點項目！將你所學會的工具都用上吧！ 接下來就會進入到模擬面試，會由導師跟學長姐作為面試官，模擬真實的面試情境。在這段時間，將心力放在補強知識上，以及如何回答面試官的提問， 演算法以及資料結構更是趁這段時間努力學習。最後，就會是 hiring week，School 會邀請 hiring partners 來 School 進行面試。 面試過程與問題百百種，沒有準備完的一天，全力以赴就對了。</description>
     </item>
     <item>
-      <title>AppWorks School (系列 1 之 2) - 申請 AppWorks School</title>
+      <title>[AppWorks School] (系列 1 之 2) - AppWorks School 申請流程</title>
       <link>https://cutechuanchuan.github.io/posts/appworksschool_1_preparation/</link>
       <pubDate>Sat, 23 Dec 2023 12:47:44 +0800</pubDate>
       <guid>https://cutechuanchuan.github.io/posts/appworksschool_1_preparation/</guid>
@@ -44,7 +51,7 @@
       <description>Hi, I am Yu-Chuan Hung, but you can call me Raymond if you prefer.&#xA;Currently, I work as a data engineer and am continuously learning many aspects of data engineering. This includes data orchestration tools, streaming processing platforms (e.g., Apache Kafka), and NoSQL databases (e.g., Apache Cassandra). This blog is a place where I record my learning experiences and side projects.&#xA;Since 2019, I have been immersed in academia, working as a full-time research assistant.</description>
     </item>
     <item>
-      <title>AppWorks School (系列 0 之 2) - 啟動、衝刺、堅持</title>
+      <title>[AppWorks School] (系列 0 之 2) - 啟動、衝刺、堅持</title>
       <link>https://cutechuanchuan.github.io/posts/appworksschool_0_series/</link>
       <pubDate>Fri, 22 Dec 2023 12:47:44 +0800</pubDate>
       <guid>https://cutechuanchuan.github.io/posts/appworksschool_0_series/</guid>

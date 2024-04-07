@@ -3,7 +3,7 @@
 
 <head>
   <title>
-  手動部署到 Cloud Run 上 · Raymond Hung&#39;s Blog
+  [自學筆記] 手動部署到 Cloud Run 上 · Raymond Hung&#39;s Blog
 </title>
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,11 +17,11 @@
 手動部署到 Cloud Run Link to heading 步驟 Link to heading [Local] 準備程式碼與 Dockerfile，並打包成 Docker Image 打包時要注意作業系統，Cloud Run 要求：linux/amd64 reference 1: official document reference 2: stack overflow 1 2 3 4 5 6 7 8 9 10 11 # Dockerfile FROM python:3.11 RUN apt-get update &amp;&amp; apt-get install -y \ gcc \ libc-dev \ libffi-dev \ &amp;&amp; rm -rf /var/lib/apt/lists/* WORKDIR /server COPY .">
 <meta name="keywords" content="data engineer, blog, developer, personal, ">
 
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="手動部署到 Cloud Run 上"/>
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="[自學筆記] 手動部署到 Cloud Run 上"/>
 <meta name="twitter:description" content="前言 Link to heading 在先前的文章中，分享了如何使用 GitHub Actions 進行 CI/CD，來自動化整個部署流程。 除了自動之外，手動部署也是另外一種體驗。這篇文章想和大家分享手動建立 Docker Image 後部署到 Cloud Run 的流程。 （更多關於 Cloud Run 的介紹可以參考先前的文章）
 手動部署到 Cloud Run Link to heading 步驟 Link to heading [Local] 準備程式碼與 Dockerfile，並打包成 Docker Image 打包時要注意作業系統，Cloud Run 要求：linux/amd64 reference 1: official document reference 2: stack overflow 1 2 3 4 5 6 7 8 9 10 11 # Dockerfile FROM python:3.11 RUN apt-get update &amp;&amp; apt-get install -y \ gcc \ libc-dev \ libffi-dev \ &amp;&amp; rm -rf /var/lib/apt/lists/* WORKDIR /server COPY ."/>
 
-<meta property="og:title" content="手動部署到 Cloud Run 上" />
+<meta property="og:title" content="[自學筆記] 手動部署到 Cloud Run 上" />
 <meta property="og:description" content="前言 Link to heading 在先前的文章中，分享了如何使用 GitHub Actions 進行 CI/CD，來自動化整個部署流程。 除了自動之外，手動部署也是另外一種體驗。這篇文章想和大家分享手動建立 Docker Image 後部署到 Cloud Run 的流程。 （更多關於 Cloud Run 的介紹可以參考先前的文章）
 手動部署到 Cloud Run Link to heading 步驟 Link to heading [Local] 準備程式碼與 Dockerfile，並打包成 Docker Image 打包時要注意作業系統，Cloud Run 要求：linux/amd64 reference 1: official document reference 2: stack overflow 1 2 3 4 5 6 7 8 9 10 11 # Dockerfile FROM python:3.11 RUN apt-get update &amp;&amp; apt-get install -y \ gcc \ libc-dev \ libffi-dev \ &amp;&amp; rm -rf /var/lib/apt/lists/* WORKDIR /server COPY ." />
 <meta property="og:type" content="article" />
@@ -136,7 +136,7 @@
         <div class="post-title">
           <h1 class="title">
             <a class="title-link" href="https://cutechuanchuan.github.io/posts/cloudrun_manual_deployment/">
-              手動部署到 Cloud Run 上
+              [自學筆記] 手動部署到 Cloud Run 上
             </a>
           </h1>
         </div>

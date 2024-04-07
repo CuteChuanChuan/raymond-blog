@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Scala on Raymond Hung&#39;s Blog</title>
-    <link>http://localhost:1313/tags/scala/</link>
+    <link>https://cutechuanchuan.github.io/tags/scala/</link>
     <description>Recent content in Scala on Raymond Hung&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 10 Apr 2024 21:10:40 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/scala/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 06 Apr 2024 21:10:40 +0800</lastBuildDate>
+    <atom:link href="https://cutechuanchuan.github.io/tags/scala/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Scala Learning Note - Chapter 1 (Basic)</title>
-      <link>http://localhost:1313/posts/scala-learning-note-ch1-basic/</link>
-      <pubDate>Wed, 10 Apr 2024 21:10:40 +0800</pubDate>
-      <guid>http://localhost:1313/posts/scala-learning-note-ch1-basic/</guid>
-      <description>前言 Link to heading Scala 可以說是一個蠻神秘但是又非常有趣的語言。例如：(1) Scala 結合了 OOP (object-oriented programming) 和 FP (functional programming)；(2) Scala 可以跑在 JVM 上，但是又有 Java 沒有功能的特色；(3) 當要處理大數據時，Scala 可以帶來很大的幫助 (像是 Apache Spark 正是由 Scala 寫成的)&#xA;然而，相較於其他程式語言 (e.g., Python &amp;amp; Javascript)，網路上有關 Scala 的教學與資料數量少很多，中文的相關資料又更少。因此接下來，我會透過多篇文章來介紹 Scala 給有興趣的人。&#xA;預計會有四篇： Basic, OOP, FP, 和 Pattern Matching，而本篇即為介紹 Scala 的第一篇文章。</description>
+      <title>[自學筆記] Scala Learning Note - Chapter 1 (Basic)</title>
+      <link>https://cutechuanchuan.github.io/posts/scala-learning-note-ch1-basic/</link>
+      <pubDate>Sat, 06 Apr 2024 21:10:40 +0800</pubDate>
+      <guid>https://cutechuanchuan.github.io/posts/scala-learning-note-ch1-basic/</guid>
+      <description> 前言 Link to heading Scala 可以說是一個蠻神秘但是又非常有趣的語言。例如：(1) Scala 結合了 OOP (object-oriented programming) 和 FP (functional programming)；(2) Scala 可以跑在 JVM 上，但是又有 Java 沒有功能的特色；(3) 當要處理大數據時，Scala 可以帶來很大的幫助 (像是 Apache Spark 正是由 Scala 寫成的)&#xA;然而，相較於其他程式語言 (e.g., Python &amp;amp; Javascript)，網路上有關 Scala 的教學與資料數量少很多，中文的相關資料又更少。因此接下來，我會透過多篇文章來介紹 Scala 給有興趣的人。&#xA;預計會有四篇： Basic, OOP, FP, 和 Pattern Matching，而本篇即為介紹 Scala 的第一篇文章。&#xA;Basic features and concepts of Scala Link to heading 在 Scala 中，所有東西都是 expression：不論如何，程式碼一定會有一個回傳值 1 2 val exampleUnit = println(&amp;#34;Hello, World!&amp;#34;) println(exampleUnit) // 會印出 () &amp;lt;== 在 Scala 中，此稱為 Unit </description>
     </item>
   </channel>
 </rss>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head>
   <title>
-  Scala Learning Note - Chapter 1 (Basic) · Raymond Hung&#39;s Blog
+  [自學筆記] Scala Learning Note - Chapter 1 (Basic) · Raymond Hung&#39;s Blog
 </title>
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,29 +13,32 @@
 
 
 <meta name="author" content="Raymond Hung">
-<meta name="description" content="前言 Link to heading Scala 可以說是一個蠻神秘但是又非常有趣的語言。例如：(1) Scala 結合了 OOP (object-oriented programming) 和 FP (functional programming)；(2) Scala 可以跑在 JVM 上，但是又有 Java 沒有功能的特色；(3) 當要處理大數據時，Scala 可以帶來很大的幫助 (像是 Apache Spark 正是由 Scala 寫成的)
+<meta name="description" content=" 前言 Link to heading Scala 可以說是一個蠻神秘但是又非常有趣的語言。例如：(1) Scala 結合了 OOP (object-oriented programming) 和 FP (functional programming)；(2) Scala 可以跑在 JVM 上，但是又有 Java 沒有功能的特色；(3) 當要處理大數據時，Scala 可以帶來很大的幫助 (像是 Apache Spark 正是由 Scala 寫成的)
 然而，相較於其他程式語言 (e.g., Python &amp; Javascript)，網路上有關 Scala 的教學與資料數量少很多，中文的相關資料又更少。因此接下來，我會透過多篇文章來介紹 Scala 給有興趣的人。
-預計會有四篇： Basic, OOP, FP, 和 Pattern Matching，而本篇即為介紹 Scala 的第一篇文章。">
+預計會有四篇： Basic, OOP, FP, 和 Pattern Matching，而本篇即為介紹 Scala 的第一篇文章。
+Basic features and concepts of Scala Link to heading 在 Scala 中，所有東西都是 expression：不論如何，程式碼一定會有一個回傳值 1 2 val exampleUnit = println(&#34;Hello, World!&#34;) println(exampleUnit) // 會印出 () &lt;== 在 Scala 中，此稱為 Unit ">
 <meta name="keywords" content="data engineer, blog, developer, personal, ">
 
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Scala Learning Note - Chapter 1 (Basic)"/>
-<meta name="twitter:description" content="前言 Link to heading Scala 可以說是一個蠻神秘但是又非常有趣的語言。例如：(1) Scala 結合了 OOP (object-oriented programming) 和 FP (functional programming)；(2) Scala 可以跑在 JVM 上，但是又有 Java 沒有功能的特色；(3) 當要處理大數據時，Scala 可以帶來很大的幫助 (像是 Apache Spark 正是由 Scala 寫成的)
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="[自學筆記] Scala Learning Note - Chapter 1 (Basic)"/>
+<meta name="twitter:description" content=" 前言 Link to heading Scala 可以說是一個蠻神秘但是又非常有趣的語言。例如：(1) Scala 結合了 OOP (object-oriented programming) 和 FP (functional programming)；(2) Scala 可以跑在 JVM 上，但是又有 Java 沒有功能的特色；(3) 當要處理大數據時，Scala 可以帶來很大的幫助 (像是 Apache Spark 正是由 Scala 寫成的)
 然而，相較於其他程式語言 (e.g., Python &amp; Javascript)，網路上有關 Scala 的教學與資料數量少很多，中文的相關資料又更少。因此接下來，我會透過多篇文章來介紹 Scala 給有興趣的人。
-預計會有四篇： Basic, OOP, FP, 和 Pattern Matching，而本篇即為介紹 Scala 的第一篇文章。"/>
+預計會有四篇： Basic, OOP, FP, 和 Pattern Matching，而本篇即為介紹 Scala 的第一篇文章。
+Basic features and concepts of Scala Link to heading 在 Scala 中，所有東西都是 expression：不論如何，程式碼一定會有一個回傳值 1 2 val exampleUnit = println(&#34;Hello, World!&#34;) println(exampleUnit) // 會印出 () &lt;== 在 Scala 中，此稱為 Unit "/>
 
-<meta property="og:title" content="Scala Learning Note - Chapter 1 (Basic)" />
-<meta property="og:description" content="前言 Link to heading Scala 可以說是一個蠻神秘但是又非常有趣的語言。例如：(1) Scala 結合了 OOP (object-oriented programming) 和 FP (functional programming)；(2) Scala 可以跑在 JVM 上，但是又有 Java 沒有功能的特色；(3) 當要處理大數據時，Scala 可以帶來很大的幫助 (像是 Apache Spark 正是由 Scala 寫成的)
+<meta property="og:title" content="[自學筆記] Scala Learning Note - Chapter 1 (Basic)" />
+<meta property="og:description" content=" 前言 Link to heading Scala 可以說是一個蠻神秘但是又非常有趣的語言。例如：(1) Scala 結合了 OOP (object-oriented programming) 和 FP (functional programming)；(2) Scala 可以跑在 JVM 上，但是又有 Java 沒有功能的特色；(3) 當要處理大數據時，Scala 可以帶來很大的幫助 (像是 Apache Spark 正是由 Scala 寫成的)
 然而，相較於其他程式語言 (e.g., Python &amp; Javascript)，網路上有關 Scala 的教學與資料數量少很多，中文的相關資料又更少。因此接下來，我會透過多篇文章來介紹 Scala 給有興趣的人。
-預計會有四篇： Basic, OOP, FP, 和 Pattern Matching，而本篇即為介紹 Scala 的第一篇文章。" />
+預計會有四篇： Basic, OOP, FP, 和 Pattern Matching，而本篇即為介紹 Scala 的第一篇文章。
+Basic features and concepts of Scala Link to heading 在 Scala 中，所有東西都是 expression：不論如何，程式碼一定會有一個回傳值 1 2 val exampleUnit = println(&#34;Hello, World!&#34;) println(exampleUnit) // 會印出 () &lt;== 在 Scala 中，此稱為 Unit " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:1313/posts/scala-learning-note-ch1-basic/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2024-04-10T21:10:40+08:00" />
-<meta property="article:modified_time" content="2024-04-10T21:10:40+08:00" />
+<meta property="og:url" content="https://cutechuanchuan.github.io/posts/scala-learning-note-ch1-basic/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-04-06T21:10:40+08:00" />
+<meta property="article:modified_time" content="2024-04-06T21:10:40+08:00" />
 
 
 
 
-<link rel="canonical" href="http://localhost:1313/posts/scala-learning-note-ch1-basic/">
+<link rel="canonical" href="https://cutechuanchuan.github.io/posts/scala-learning-note-ch1-basic/">
 
 
 <link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
@@ -43,7 +46,7 @@
 
   
   
-  <link rel="stylesheet" href="/css/coder.css" media="screen">
+  <link rel="stylesheet" href="/css/coder.min.e1bdf152d93b060b06ba5d496486ed9c201a8b95d335e035beb5faebe3b61cad.css" integrity="sha256-4b3xUtk7BgsGul1JZIbtnCAai5XTNeA1vrX66&#43;O2HK0=" crossorigin="anonymous" media="screen" />
 
 
 
@@ -53,7 +56,7 @@
   
     
     
-    <link rel="stylesheet" href="/css/coder-dark.css" media="screen">
+    <link rel="stylesheet" href="/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css" integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin="anonymous" media="screen" />
   
 
 
@@ -138,8 +141,8 @@
       <header>
         <div class="post-title">
           <h1 class="title">
-            <a class="title-link" href="http://localhost:1313/posts/scala-learning-note-ch1-basic/">
-              Scala Learning Note - Chapter 1 (Basic)
+            <a class="title-link" href="https://cutechuanchuan.github.io/posts/scala-learning-note-ch1-basic/">
+              [自學筆記] Scala Learning Note - Chapter 1 (Basic)
             </a>
           </h1>
         </div>
@@ -147,8 +150,8 @@
           <div class="date">
             <span class="posted-on">
               <i class="fa fa-calendar" aria-hidden="true"></i>
-              <time datetime="2024-04-10T21:10:40&#43;08:00">
-                April 10, 2024
+              <time datetime="2024-04-06T21:10:40&#43;08:00">
+                April 6, 2024
               </time>
             </span>
             <span class="reading-time">
@@ -173,6 +176,7 @@
         <nav id="TableOfContents">
   <ol>
     <li><a href="#前言">前言</a></li>
+    <li><a href="#basic-features-and-concepts-of-scala">Basic features and concepts of Scala</a></li>
   </ol>
 </nav>
         ----------------------------------------
@@ -186,6 +190,29 @@
 <p>Scala 可以說是一個蠻神秘但是又非常有趣的語言。例如：(1) Scala 結合了 OOP (object-oriented programming) 和 FP (functional programming)；(2) Scala 可以跑在 JVM 上，但是又有 Java 沒有功能的特色；(3) 當要處理大數據時，Scala 可以帶來很大的幫助 (像是 Apache Spark 正是由 Scala 寫成的)<br>
 然而，相較於其他程式語言 (e.g., Python &amp; Javascript)，網路上有關 Scala 的教學與資料數量少很多，中文的相關資料又更少。因此接下來，我會透過多篇文章來介紹 Scala 給有興趣的人。<br>
 預計會有四篇： Basic, OOP, FP, 和 Pattern Matching，而本篇即為介紹 Scala 的第一篇文章。</p>
+<h1 id="basic-features-and-concepts-of-scala">
+  Basic features and concepts of Scala
+  <a class="heading-link" href="#basic-features-and-concepts-of-scala">
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
+  </a>
+</h1>
+<ul>
+<li>在 Scala 中，所有東西都是 expression：不論如何，程式碼一定會有一個回傳值</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-scala" data-lang="scala"><span class="line"><span class="cl"><span class="k">val</span> <span class="n">exampleUnit</span> <span class="k">=</span> <span class="n">println</span><span class="o">(</span><span class="s">&#34;Hello, World!&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">println</span><span class="o">(</span><span class="n">exampleUnit</span><span class="o">)</span> <span class="c1">// 會印出 () &lt;== 在 Scala 中，此稱為 Unit
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li></li>
+</ul>
 
       </div>
 
@@ -251,7 +278,7 @@
 
   
   
-  <script src="/js/coder.js"></script>
+  <script src="/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js" integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script>
   
 
   

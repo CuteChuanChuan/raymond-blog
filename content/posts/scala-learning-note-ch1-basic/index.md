@@ -1,7 +1,7 @@
 +++ 
 draft = false
-date = 2024-04-10T21:10:40+08:00
-title = "Scala Learning Note - Chapter 1 (Basic)"
+date = 2024-04-06T21:10:40+08:00
+title = "[自學筆記] Scala Learning Note - Chapter 1 (Basic)"
 description = ""
 slug = ""
 authors = []
@@ -20,15 +20,8 @@ Scala 可以說是一個蠻神秘但是又非常有趣的語言。例如：(1) S
 - 在 Scala 中，所有東西都是 expression：不論如何，程式碼一定會有一個回傳值
 
 ```scala
-println("Hello, World")
-val x = 2
+val exampleUnit = println("Hello, World!")
+println(exampleUnit) // 會印出 () <== 在 Scala 中，此稱為 Unit
 ```
-
-{{< highlight Scala "linenos=table" >}}
-
-
-# some code
-echo "Hello World"
-{{< /highlight >}}
 
 - 

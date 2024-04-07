@@ -1,7 +1,7 @@
 +++ 
 draft = false
 date = 2024-01-07T14:10:41+08:00
-title = "結合 Cloud Run 和 GitHub Actions，自動部署 FastAPI server 到 Cloud Run 上"
+title = "[自學筆記] Cloud Run + GitHub Actions，自動到 Cloud Run 上"
 description = ""
 slug = ""
 authors = []

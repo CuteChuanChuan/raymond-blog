@@ -1,7 +1,7 @@
 +++ 
 draft = false
 date = 2024-02-21T21:10:41+08:00
-title = "手動部署到 Cloud Run 上"
+title = "[自學筆記] 手動部署到 Cloud Run 上"
 description = ""
 slug = ""
 authors = []

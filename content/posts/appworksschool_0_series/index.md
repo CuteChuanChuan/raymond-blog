@@ -1,7 +1,7 @@
 +++ 
 draft = false
 date = 2023-12-22T12:47:44+08:00
-title = "AppWorks School (系列 0 之 2) - 啟動、衝刺、堅持"
+title = "[AppWorks School] (系列 0 之 2) - 啟動、衝刺、堅持"
 description = ""
 slug = ""
 authors = []
